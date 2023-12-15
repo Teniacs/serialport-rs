@@ -763,15 +763,18 @@ pub fn new<'a>(path: impl Into<std::borrow::Cow<'a, str>>, baud_rate: u32) -> Se
 /// It is not guaranteed that these ports exist or are available even if they're
 /// returned by this function.
 pub fn available_ports() -> Result<Vec<SerialPortInfo>> {
-    #[cfg(unix)]
-    return crate::posix::available_ports();
+    // #[cfg(unix)]
+    // return crate::posix::available_ports();
 
     #[cfg(windows)]
     return crate::windows::available_ports();
 
-    #[cfg(not(any(unix, windows)))]
-    Err(Error::new(
-        ErrorKind::Unknown,
-        "available_ports() not implemented for platform",
-    ))
+    #[cfg(not(windows))]
+    return crate::posix::available_ports();
+    
+    // #[cfg(not(any(unix, windows)))]
+    // Err(Error::new(
+    //     ErrorKind::Unknown,
+    //     "available_ports() not implemented for platform",
+    // ))
 }
